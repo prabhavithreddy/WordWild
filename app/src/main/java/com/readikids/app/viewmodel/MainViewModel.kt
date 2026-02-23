@@ -50,9 +50,12 @@ class MainViewModel @Inject constructor(
 
     fun recordGameResult(gameId: String, score: Int, correct: Int, total: Int, skill: String) {
         viewModelScope.launch {
+            if (total <= 0) return@launch // Prevent division by zero
+
+            val accuracy = correct.toFloat() / total
             val stars = when {
-                correct.toFloat() / total >= 0.9f -> 3
-                correct.toFloat() / total >= 0.6f -> 2
+                accuracy >= 0.9f -> 3
+                accuracy >= 0.6f -> 2
                 else -> 1
             }
             val xp = stars * 15
@@ -62,7 +65,7 @@ class MainViewModel @Inject constructor(
                     xpEarned = xp, correctAnswers = correct, totalQuestions = total
                 )
             )
-            progressDao.updateSkillStat(skill, correct.toFloat() / total >= 0.6f)
+            progressDao.updateSkillStat(skill, accuracy >= 0.6f)
             prefs.addXp(xp)
             prefs.updateStreak()
             checkAndUnlockBadges(xp)

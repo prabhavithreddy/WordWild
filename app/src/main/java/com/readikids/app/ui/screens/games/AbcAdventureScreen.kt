@@ -51,12 +51,18 @@ fun AbcAdventureScreen(
     var score by remember { mutableStateOf(0) }
     var animatingLetter by remember { mutableStateOf<Char?>(null) }
 
+    // Use a Ref to keep track of initialization to avoid multiple TTS objects
+    val ttsInitialized = remember { mutableStateOf(false) }
+
     LaunchedEffect(Unit) {
-        tts = TextToSpeech(context) { status ->
-            if (status == TextToSpeech.SUCCESS) {
-                tts?.language = Locale.US
-                tts?.setPitch(1.3f)
-                tts?.setSpeechRate(0.85f)
+        if (!ttsInitialized.value) {
+            tts = TextToSpeech(context) { status ->
+                if (status == TextToSpeech.SUCCESS) {
+                    tts?.language = Locale.US
+                    tts?.setPitch(1.3f)
+                    tts?.setSpeechRate(0.85f)
+                    ttsInitialized.value = true
+                }
             }
         }
     }
@@ -65,13 +71,6 @@ fun AbcAdventureScreen(
         onDispose {
             tts?.stop()
             tts?.shutdown()
-        }
-    }
-
-    // Record completion when all letters tapped
-    LaunchedEffect(tappedLetters.size) {
-        if (tappedLetters.size == 26) {
-            viewModel.recordGameResult("abc_adventure", score, 26, 26, "phonics")
         }
     }
 
@@ -135,7 +134,7 @@ fun AbcAdventureScreen(
         // Alphabet grid
         LazyVerticalGrid(
             columns = GridCells.Fixed(6),
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+            modifier = Modifier.fillMaxWidth().weight(1f).padding(horizontal = 12.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
@@ -206,19 +205,44 @@ fun AbcAdventureScreen(
                     Text("🎊", fontSize = 48.sp)
                     Text("All Letters Learned!", fontWeight = FontWeight.Black, color = Green80, fontSize = 22.sp)
                     Text("You earned $score stars!", color = DarkBlue, fontWeight = FontWeight.Bold)
-                    Spacer(Modifier.height(12.dp))
-                    BouncyButton(
-                        onClick = {
-                            tappedLetters = emptySet()
-                            selectedLetter = null
-                            score = 0
-                        },
-                        color = Green80
+                    Spacer(Modifier.height(16.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        Text("Play Again 🔄", fontWeight = FontWeight.ExtraBold, color = Color.White)
+                        BouncyButton(
+                            onClick = {
+                                viewModel.recordGameResult("abc_adventure", score, 26, 26, "phonics")
+                                tappedLetters = emptySet()
+                                selectedLetter = null
+                                score = 0
+                            },
+                            color = Green80,
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text("Play Again 🔄", fontWeight = FontWeight.ExtraBold, color = Color.White)
+                        }
+                        BouncyButton(
+                            onClick = {
+                                viewModel.recordGameResult("abc_adventure", score, 26, 26, "phonics")
+                                onBack()
+                            },
+                            color = Purple80,
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text("Go Home 🏠", fontWeight = FontWeight.ExtraBold, color = Color.White)
+                        }
                     }
                 }
             }
+        } else {
+            // Show progress bar
+            LinearProgressIndicator(
+                progress = tappedLetters.size / 26f,
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 16.dp).height(12.dp).clip(RoundedCornerShape(50)),
+                color = Purple80,
+                trackColor = Color.White
+            )
         }
     }
 }

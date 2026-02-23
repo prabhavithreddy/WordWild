@@ -4,6 +4,10 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -60,11 +64,13 @@ fun HomeScreen(
         label = "floatY"
     )
 
-    LazyColumn(
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
         modifier = Modifier.fillMaxSize().background(SkyBackground),
-        verticalArrangement = Arrangement.spacedBy(0.dp)
+        contentPadding = PaddingValues(bottom = 24.dp)
     ) {
-        item {
+        // Header
+        item(span = { GridItemSpan(2) }) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -120,7 +126,8 @@ fun HomeScreen(
             }
         }
 
-        item {
+        // Daily Challenge
+        item(span = { GridItemSpan(2) }) {
             Spacer(Modifier.height(20.dp))
             Box(
                 modifier = Modifier
@@ -151,7 +158,8 @@ fun HomeScreen(
             }
         }
 
-        item {
+        // Games Section Title
+        item(span = { GridItemSpan(2) }) {
             Spacer(Modifier.height(24.dp))
             Text(
                 "🎮 Reading Games",
@@ -163,29 +171,17 @@ fun HomeScreen(
             Spacer(Modifier.height(12.dp))
         }
 
-        // ─── Games Grid (Fixed Alignment) ─────────────────────────────
-        items(gameCards.chunked(2)) { pair ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 6.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                pair.forEach { card ->
-                    GameCardItem(
-                        card = card,
-                        onClick = { onNavigateToGame(card.id) },
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-                // Handle odd numbers of games
-                if (pair.size == 1) {
-                    Spacer(Modifier.weight(1f))
-                }
-            }
+        // Games Grid
+        items(gameCards) { card ->
+            GameCardItem(
+                card = card,
+                onClick = { onNavigateToGame(card.id) },
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
+            )
         }
 
-        item {
+        // Skills Section Title
+        item(span = { GridItemSpan(2) }) {
             Spacer(Modifier.height(24.dp))
             Row(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
@@ -198,7 +194,10 @@ fun HomeScreen(
                 }
             }
             Spacer(Modifier.height(12.dp))
+        }
 
+        // Skills Card
+        item(span = { GridItemSpan(2) }) {
             val skillDisplay = listOf(
                 Triple("phonics", "🔤 Phonics", Purple80),
                 Triple("vocabulary", "📝 Vocabulary", Pink80),
@@ -226,10 +225,15 @@ fun HomeScreen(
             }
         }
 
-        item {
+        // Badges Section Title
+        item(span = { GridItemSpan(2) }) {
             Spacer(Modifier.height(24.dp))
             Text("🏅 My Badges", fontWeight = FontWeight.ExtraBold, fontSize = 20.sp, color = DarkBlue, modifier = Modifier.padding(horizontal = 16.dp))
             Spacer(Modifier.height(12.dp))
+        }
+
+        // Badges Horizontal Row (Nesting is fine here as it's horizontal)
+        item(span = { GridItemSpan(2) }) {
             LazyRow(
                 contentPadding = PaddingValues(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -239,7 +243,6 @@ fun HomeScreen(
                     BadgeItem(achievement = achievement, unlocked = unlocked)
                 }
             }
-            Spacer(Modifier.height(40.dp))
         }
     }
 }
