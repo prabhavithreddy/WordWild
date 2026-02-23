@@ -1,0 +1,39 @@
+# Built artifacts
+bin/
+gen/
+out/
+build/
+.gradle/
+.kotlin/
+app/build/
+
+# IDE files
+.idea/
+*.iml
+*.iws
+*.ipr
+.shelf/
+capture/
+assetStore/
+
+# Local configuration
+local.properties
+
+# Log files
+*.log
+
+# Keystore files
+*.jks
+*.keystore
+*.p12
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Google Services (if applicable)
+# google-services.json
+
+# Crashlytics (if applicable)
+# crashlytics.properties
+# fabric.properties
