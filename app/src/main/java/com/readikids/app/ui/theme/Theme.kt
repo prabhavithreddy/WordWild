@@ -5,6 +5,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
@@ -44,8 +45,16 @@ fun ReadiKidsTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
+            
+            // 1. Make the status bar transparent so content can draw behind it if needed,
+            // or at least not clash with a solid color.
+            window.statusBarColor = Color.Transparent.toArgb()
+            
+            // 2. Set the icons to 'Dark' (AppearanceLightStatusBars = true) 
+            // so they are visible on our light backgrounds (SkyBackground, etc.)
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+            val controller = WindowCompat.getInsetsController(window, view)
+            controller.isAppearanceLightStatusBars = true
         }
     }
 
