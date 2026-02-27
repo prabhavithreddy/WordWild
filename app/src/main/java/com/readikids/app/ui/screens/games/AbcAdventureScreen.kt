@@ -4,7 +4,9 @@ import android.speech.tts.TextToSpeech
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -19,30 +21,31 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.readikids.app.data.model.ALPHABET
+import com.readikids.app.data.model.LetterData
 import com.readikids.app.ui.screens.BouncyButton
 import com.readikids.app.ui.screens.GameTopBar
 import com.readikids.app.ui.theme.*
 import com.readikids.app.viewmodel.MainViewModel
-import java.util.Locale
-
-private data class LetterData(val letter: Char, val emoji: String, val word: String)
-
-private val ALPHABET = listOf(
-    LetterData('A', "🍎", "Apple"), LetterData('B', "🐻", "Bear"), LetterData('C', "🐱", "Cat"),
-    LetterData('D', "🐶", "Dog"), LetterData('E', "🐘", "Elephant"), LetterData('F', "🐟", "Fish"),
-    LetterData('G', "🦒", "Giraffe"), LetterData('H', "🏠", "House"), LetterData('I', "🍦", "Ice Cream"),
-    LetterData('J', "🕹️", "Jump"), LetterData('K', "🪁", "Kite"), LetterData('L', "🦁", "Lion"),
-    LetterData('M', "🌙", "Moon"), LetterData('N', "🌰", "Nut"), LetterData('O', "🐙", "Octopus"),
-    LetterData('P', "🐧", "Penguin"), LetterData('Q', "👑", "Queen"), LetterData('R', "🌈", "Rainbow"),
-    LetterData('S', "⭐", "Star"), LetterData('T', "🐯", "Tiger"), LetterData('U', "☂️", "Umbrella"),
-    LetterData('V', "🎻", "Violin"), LetterData('W', "🐋", "Whale"), LetterData('X', "🎸", "Xylophone"),
-    LetterData('Y', "🧶", "Yarn"), LetterData('Z', "🦓", "Zebra"),
-)
+import java.util.*
 
 @Composable
 fun AbcAdventureScreen(
     onBack: () -> Unit,
     viewModel: MainViewModel = hiltViewModel()
+) {
+    AbcAdventureContent(
+        onBack = onBack,
+        onGameFinished = { score ->
+            viewModel.recordGameResult("abc_adventure", score, 26, 26, "phonics")
+        }
+    )
+}
+
+@Composable
+fun AbcAdventureContent(
+    onBack: () -> Unit,
+    onGameFinished: (Int) -> Unit
 ) {
     val context = LocalContext.current
     var tts by remember { mutableStateOf<TextToSpeech?>(null) }
@@ -212,7 +215,7 @@ fun AbcAdventureScreen(
                     ) {
                         BouncyButton(
                             onClick = {
-                                viewModel.recordGameResult("abc_adventure", score, 26, 26, "phonics")
+                                onGameFinished(score)
                                 tappedLetters = emptySet()
                                 selectedLetter = null
                                 score = 0
@@ -224,7 +227,7 @@ fun AbcAdventureScreen(
                         }
                         BouncyButton(
                             onClick = {
-                                viewModel.recordGameResult("abc_adventure", score, 26, 26, "phonics")
+                                onGameFinished(score)
                                 onBack()
                             },
                             color = Purple80,

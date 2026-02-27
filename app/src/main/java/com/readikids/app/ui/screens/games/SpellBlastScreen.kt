@@ -41,6 +41,19 @@ fun SpellBlastScreen(
     onBack: () -> Unit,
     viewModel: MainViewModel = hiltViewModel()
 ) {
+    SpellBlastContent(
+        onBack = onBack,
+        onGameFinished = { score, correctCount ->
+            viewModel.recordGameResult("spell_blast", score, correctCount, SPELL_WORDS.size, "spelling")
+        }
+    )
+}
+
+@Composable
+fun SpellBlastContent(
+    onBack: () -> Unit,
+    onGameFinished: (Int, Int) -> Unit
+) {
     var wordIndex by remember { mutableStateOf(0) }
     var score by remember { mutableStateOf(0) }
     var correctCount by remember { mutableStateOf(0) }
@@ -221,7 +234,7 @@ fun SpellBlastScreen(
                 } else {
                     BouncyButton(
                         onClick = {
-                            viewModel.recordGameResult("spell_blast", score, correctCount, SPELL_WORDS.size, "spelling")
+                            onGameFinished(score, correctCount)
                             wordIndex = 0; score = 0; correctCount = 0
                         },
                         color = Orange80, modifier = Modifier.fillMaxWidth()

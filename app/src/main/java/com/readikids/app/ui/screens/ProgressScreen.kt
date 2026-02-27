@@ -17,7 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.readikids.app.data.model.Achievements
+import com.readikids.app.data.model.*
 import com.readikids.app.ui.theme.*
 import com.readikids.app.viewmodel.MainViewModel
 
@@ -35,6 +35,31 @@ fun ProgressScreen(
     val allProgress by viewModel.allProgress.collectAsState(initial = emptyList())
     val badges by viewModel.badges.collectAsState(initial = emptyList())
 
+    ProgressScreenContent(
+        childName = childName,
+        totalXp = totalXp,
+        streakDays = streakDays,
+        currentLevel = currentLevel,
+        levelProgress = levelProgress,
+        skillStats = skillStats,
+        allProgress = allProgress,
+        badges = badges,
+        onBack = onBack
+    )
+}
+
+@Composable
+fun ProgressScreenContent(
+    childName: String,
+    totalXp: Int,
+    streakDays: Int,
+    currentLevel: Int,
+    levelProgress: Float,
+    skillStats: List<SkillStat>,
+    allProgress: List<GameProgress>,
+    badges: List<String>,
+    onBack: () -> Unit
+) {
     val skillDisplay = listOf(
         Triple("phonics", "🔤 Phonics", Purple80),
         Triple("vocabulary", "📝 Vocabulary", Pink80),

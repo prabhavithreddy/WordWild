@@ -24,7 +24,7 @@ val NunitoFamily = FontFamily(
     Font(googleFont = fontName, fontProvider = provider, weight = FontWeight.Black),
 )
 
-val ReadiKidsTypography = Typography(
+val WordWildTypography = Typography(
     displayLarge = TextStyle(
         fontFamily = NunitoFamily,
         fontWeight = FontWeight.Black,

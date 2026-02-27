@@ -36,6 +36,19 @@ fun WordMatchScreen(
     onBack: () -> Unit,
     viewModel: MainViewModel = hiltViewModel()
 ) {
+    WordMatchContent(
+        onBack = onBack,
+        onGameFinished = { score, correct, total ->
+            viewModel.recordGameResult("word_match", score, correct, total, "vocabulary")
+        }
+    )
+}
+
+@Composable
+fun WordMatchContent(
+    onBack: () -> Unit,
+    onGameFinished: (Int, Int, Int) -> Unit
+) {
     var pairs by remember { mutableStateOf(ALL_PAIRS.shuffled().take(6)) }
     var emojiOrder by remember { mutableStateOf(pairs.shuffled()) }
     var selectedWord by remember { mutableStateOf<String?>(null) }
@@ -50,7 +63,7 @@ fun WordMatchScreen(
             gameComplete = true
             val total = pairs.size
             val correct = total // all correct at end
-            viewModel.recordGameResult("word_match", score, correct, total, "vocabulary")
+            onGameFinished(score, correct, total)
         }
     }
 

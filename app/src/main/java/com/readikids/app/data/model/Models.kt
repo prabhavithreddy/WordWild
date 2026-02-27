@@ -62,6 +62,20 @@ data class GameInfo(
     val xpReward: Int = 30
 )
 
+data class LetterData(val letter: Char, val word: String, val emoji: String)
+
+val ALPHABET = listOf(
+    LetterData('A', "Apple", "🍎"), LetterData('B', "Bear", "🐻"), LetterData('C', "Cat", "🐱"),
+    LetterData('D', "Dog", "🐶"), LetterData('E', "Elephant", "🐘"), LetterData('F', "Fish", "🐟"),
+    LetterData('G', "Giraffe", "🦒"), LetterData('H', "Horse", "🐴"), LetterData('I', "Ice Cream", "🍦"),
+    LetterData('J', "Jellyfish", "🪼"), LetterData('K', "Kangaroo", "🦘"), LetterData('L', "Lion", "🦁"),
+    LetterData('M', "Monkey", "🐒"), LetterData('N', "Nut", "🥜"), LetterData('O', "Owl", "🦉"),
+    LetterData('P', "Panda", "🐼"), LetterData('Q', "Queen", "👸"), LetterData('R', "Rabbit", "🐰"),
+    LetterData('S', "Sun", "☀️"), LetterData('T', "Tiger", "🐯"), LetterData('U', "Umbrella", "☂️"),
+    LetterData('V', "Violin", "🎻"), LetterData('W', "Whale", "🐋"), LetterData('X', "Xylophone", "🪘"),
+    LetterData('Y', "Yak", "🐃"), LetterData('Z', "Zebra", "🦓")
+)
+
 object Games {
     val all = listOf(
         GameInfo("abc_adventure", "ABC Adventure", "Tap letters, hear sounds!", "🔤", "phonics", AgeGroup.TINY_STARS),

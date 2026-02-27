@@ -16,5 +16,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "ReadiKids"
+rootProject.name = "WordWild"
 include ':app'

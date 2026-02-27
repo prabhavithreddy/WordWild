@@ -25,7 +25,7 @@ sealed class Screen(val route: String) {
 }
 
 @Composable
-fun ReadiKidsNavGraph() {
+fun WordWildNavGraph() {
     val navController: NavHostController = rememberNavController()
     val mainViewModel: MainViewModel = hiltViewModel()
     val isOnboardingDone by mainViewModel.isOnboardingDone.collectAsState(initial = null)

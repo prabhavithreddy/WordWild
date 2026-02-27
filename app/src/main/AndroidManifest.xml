@@ -13,7 +13,7 @@
     </queries>
 
     <application
-        android:name=".ReadiKidsApp"
+        android:name=".WordWildApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -21,7 +21,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ReadiKids"
+        android:theme="@style/Theme.WordWild"
         tools:targetApi="31">
 
         <activity
@@ -29,7 +29,7 @@
             android:exported="true"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.ReadiKids.SplashScreen"
+            android:theme="@style/Theme.WordWild.SplashScreen"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

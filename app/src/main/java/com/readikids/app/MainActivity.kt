@@ -12,8 +12,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.readikids.app.navigation.ReadiKidsNavGraph
-import com.readikids.app.ui.theme.ReadiKidsTheme
+import com.readikids.app.navigation.WordWildNavGraph
+import com.readikids.app.ui.theme.WordWildTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,14 +22,14 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         super.onCreate(savedInstanceState)
         setContent {
-            ReadiKidsTheme {
+            WordWildTheme {
                 Surface(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(WindowInsets.statusBars.asPaddingValues()),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    ReadiKidsNavGraph()
+                    WordWildNavGraph()
                 }
             }
         }

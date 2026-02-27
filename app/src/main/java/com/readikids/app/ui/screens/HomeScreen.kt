@@ -57,6 +57,35 @@ fun HomeScreen(
     val badges by viewModel.badges.collectAsState(initial = emptyList())
     val ageGroup by viewModel.ageGroup.collectAsState(initial = AgeGroup.TINY_STARS)
 
+    HomeScreenContent(
+        childName = childName,
+        totalXp = totalXp,
+        streakDays = streakDays,
+        currentLevel = currentLevel,
+        levelProgress = levelProgress,
+        gamesPlayedToday = gamesPlayedToday,
+        skillStats = skillStats,
+        badges = badges,
+        ageGroup = ageGroup,
+        onNavigateToGame = onNavigateToGame,
+        onNavigateToProgress = onNavigateToProgress
+    )
+}
+
+@Composable
+fun HomeScreenContent(
+    childName: String,
+    totalXp: Int,
+    streakDays: Int,
+    currentLevel: Int,
+    levelProgress: Float,
+    gamesPlayedToday: Int,
+    skillStats: List<SkillStat>,
+    badges: List<String>,
+    ageGroup: AgeGroup,
+    onNavigateToGame: (String) -> Unit,
+    onNavigateToProgress: () -> Unit
+) {
     val infiniteTransition = rememberInfiniteTransition(label = "float")
     val floatY by infiniteTransition.animateFloat(
         initialValue = 0f, targetValue = -12f,

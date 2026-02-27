@@ -35,7 +35,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun ReadiKidsTheme(
+fun WordWildTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
@@ -46,12 +46,10 @@ fun ReadiKidsTheme(
         SideEffect {
             val window = (view.context as Activity).window
             
-            // 1. Make the status bar transparent so content can draw behind it if needed,
-            // or at least not clash with a solid color.
+            // 1. Make the status bar transparent
             window.statusBarColor = Color.Transparent.toArgb()
             
-            // 2. Set the icons to 'Dark' (AppearanceLightStatusBars = true) 
-            // so they are visible on our light backgrounds (SkyBackground, etc.)
+            // 2. Set the icons to 'Dark'
             WindowCompat.setDecorFitsSystemWindows(window, false)
             val controller = WindowCompat.getInsetsController(window, view)
             controller.isAppearanceLightStatusBars = true
@@ -60,7 +58,7 @@ fun ReadiKidsTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = ReadiKidsTypography,
+        typography = WordWildTypography,
         content = content
     )
 }

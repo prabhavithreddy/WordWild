@@ -37,6 +37,19 @@ fun SightWordNinjaScreen(
     onBack: () -> Unit,
     viewModel: MainViewModel = hiltViewModel()
 ) {
+    SightWordNinjaContent(
+        onBack = onBack,
+        onGameFinished = { score, correct, round ->
+            viewModel.recordGameResult("sight_word_ninja", score, correct, round, "sight_words")
+        }
+    )
+}
+
+@Composable
+fun SightWordNinjaContent(
+    onBack: () -> Unit,
+    onGameFinished: (Int, Int, Int) -> Unit
+) {
     var gameState by remember { mutableStateOf<GameState>(GameState.Ready) }
     var targetWord by remember { mutableStateOf("the") }
     var displayedWords by remember { mutableStateOf(listOf<String>()) }
@@ -70,7 +83,7 @@ fun SightWordNinjaScreen(
             if (gameState == GameState.Playing) {
                 lives--
                 if (lives <= 0) {
-                    viewModel.recordGameResult("sight_word_ninja", score, correctCount, round + 1, "sight_words")
+                    onGameFinished(score, correctCount, round + 1)
                     gameState = GameState.GameOver
                 } else {
                     nextRound()
@@ -105,7 +118,7 @@ fun SightWordNinjaScreen(
                         lives--
                         flashWord = Pair(tapped, false)
                         if (lives <= 0) {
-                            viewModel.recordGameResult("sight_word_ninja", score, correctCount, round + 1, "sight_words")
+                            onGameFinished(score, correctCount, round + 1)
                             gameState = GameState.GameOver
                         }
                     }

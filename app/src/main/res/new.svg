@@ -1,0 +1,64 @@
+<svg width="1024" height="500" viewBox="0 0 1024 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7C3AED;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1E1B4B;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="url(#bgGrad)" />
+
+  <!-- Decorative Jungle Elements -->
+  <g opacity="0.1">
+    <path d="M-50,500 Q150,300 350,500 Z" fill="#10B981" />
+    <path d="M1074,500 Q874,300 674,500 Z" fill="#10B981" />
+    <text x="50" y="450" font-size="120" font-family="serif">🌿</text>
+    <text x="900" y="100" font-size="120" font-family="serif">🍃</text>
+    <text x="800" y="400" font-size="180" font-family="serif">🌴</text>
+  </g>
+
+  <!-- Main Content Area -->
+  <g transform="translate(80, 100)">
+    <!-- Brand Section -->
+    <g>
+      <rect width="110" height="110" rx="30" fill="white" />
+      <text x="55" y="82" font-size="70" text-anchor="middle" font-family="serif">🦁</text>
+
+      <text x="140" y="85" font-family="sans-serif" font-weight="900" font-size="96" fill="white">
+        WordWild
+      </text>
+    </g>
+
+    <!-- Headline -->
+    <text x="0" y="160" font-family="sans-serif" font-weight="800" font-size="38" fill="#F59E0B">
+      The Ultimate Wild Reading Adventure
+    </text>
+
+    <text x="0" y="205" font-family="sans-serif" font-weight="600" font-size="22" fill="#DBEAFE">
+      Learn Phonics, Vocabulary &amp; Spelling through Interactive Games
+    </text>
+
+    <!-- Badges Row -->
+    <g transform="translate(0, 260)">
+      <g>
+        <rect width="160" height="56" rx="28" fill="white" fill-opacity="0.2" />
+        <text x="80" y="36" font-family="sans-serif" font-weight="bold" font-size="20" fill="white" text-anchor="middle">🦁 Phonics</text>
+      </g>
+      <g transform="translate(180, 0)">
+        <rect width="180" height="56" rx="28" fill="white" fill-opacity="0.2" />
+        <text x="90" y="36" font-family="sans-serif" font-weight="bold" font-size="20" fill="white" text-anchor="middle">🐘 Vocabulary</text>
+      </g>
+      <g transform="translate(380, 0)">
+        <rect width="180" height="56" rx="28" fill="white" fill-opacity="0.2" />
+        <text x="90" y="36" font-family="sans-serif" font-weight="bold" font-size="20" fill="white" text-anchor="middle">📖 Adventure</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Mascot Side -->
+  <g transform="translate(750, 250)">
+    <circle r="180" fill="white" fill-opacity="0.05" />
+    <text x="0" y="80" font-size="240" text-anchor="middle" font-family="serif">🐼</text>
+  </g>
+</svg>

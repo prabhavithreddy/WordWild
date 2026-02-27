@@ -95,7 +95,7 @@ fun OnboardingScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    if (step < 2) "Next →" else "Start Reading! 🚀",
+                    if (step < 2) "Next →" else "Start Exploring! 🚀",
                     color = DarkBlue,
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 18.sp
@@ -106,18 +106,18 @@ fun OnboardingScreen(
 }
 
 @Composable
-private fun WelcomeStep() {
+fun WelcomeStep() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text("📚", fontSize = 100.sp)
+        Text("🦁", fontSize = 100.sp)
         Spacer(Modifier.height(16.dp))
         Text(
-            "ReadiKids",
+            "WordWild",
             color = Color.White,
             fontWeight = FontWeight.Black,
             fontSize = 42.sp
         )
         Text(
-            "Learn to read through fun games!",
+            "Explore the wild world of reading!",
             color = Color.White.copy(alpha = 0.85f),
             fontSize = 17.sp,
             textAlign = TextAlign.Center,
@@ -125,10 +125,10 @@ private fun WelcomeStep() {
         )
         Spacer(Modifier.height(32.dp))
         listOf(
-            "🎮 6 exciting reading games",
+            "🎮 6 wild reading games",
             "⭐ Earn XP & level up",
             "🔥 Daily streaks & badges",
-            "📊 Track reading progress"
+            "📊 Track your adventure"
         ).forEach { feature ->
             Row(
                 modifier = Modifier
@@ -146,19 +146,19 @@ private fun WelcomeStep() {
 }
 
 @Composable
-private fun NameStep(
+fun NameStep(
     name: String, avatar: String, avatars: List<String>,
     onNameChange: (String) -> Unit, onAvatarSelect: (String) -> Unit
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(avatar, fontSize = 80.sp)
         Spacer(Modifier.height(8.dp))
-        Text("Who's learning today?", color = Color.White, fontWeight = FontWeight.ExtraBold, fontSize = 24.sp, textAlign = TextAlign.Center)
+        Text("Who's exploring today?", color = Color.White, fontWeight = FontWeight.ExtraBold, fontSize = 24.sp, textAlign = TextAlign.Center)
         Spacer(Modifier.height(20.dp))
         OutlinedTextField(
             value = name,
             onValueChange = onNameChange,
-            placeholder = { Text("Child's name", color = Color.White.copy(alpha = 0.5f)) },
+            placeholder = { Text("Explorer's name", color = Color.White.copy(alpha = 0.5f)) },
             colors = OutlinedTextFieldDefaults.colors(
                 focusedTextColor = Color.White,
                 unfocusedTextColor = Color.White,
@@ -198,11 +198,11 @@ private fun NameStep(
 }
 
 @Composable
-private fun AgeStep(selected: AgeGroup, onSelect: (AgeGroup) -> Unit) {
+fun AgeStep(selected: AgeGroup, onSelect: (AgeGroup) -> Unit) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text("How old are you?", color = Color.White, fontWeight = FontWeight.ExtraBold, fontSize = 26.sp, textAlign = TextAlign.Center)
         Spacer(Modifier.height(8.dp))
-        Text("We'll personalize games for your level!", color = Color.White.copy(alpha = 0.8f), textAlign = TextAlign.Center)
+        Text("We'll personalize your wild adventure!", color = Color.White.copy(alpha = 0.8f), textAlign = TextAlign.Center)
         Spacer(Modifier.height(24.dp))
         AgeGroup.values().forEach { ag ->
             val isSelected = ag == selected
