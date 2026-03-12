@@ -92,12 +92,12 @@ fun SightWordNinjaContent(
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize().background(SkyBackground)) {
-        GameTopBar("Sight Word Ninja", "👁️", score, Yellow80, onBack)
+    Column(modifier = Modifier.fillMaxSize().background(WarmCream)) {
+        GameTopBar("Sight Word Ninja", "👁️", score, Teal, onBack)
 
         when (gameState) {
             GameState.Ready -> ReadyView(onStart = { nextRound(); round = 0; score = 0; lives = 3; correctCount = 0 })
-            GameState.GameOver -> GameOverView(score = score, correctCount = correctCount, round = round,
+            GameState.GameOver -> CelebrationView(score = score, correctCount = correctCount, round = round,
                 onRestart = { nextRound(); round = 0; score = 0; lives = 3; correctCount = 0 })
             GameState.Playing -> PlayingView(
                 targetWord = targetWord,
@@ -137,40 +137,46 @@ private fun ReadyView(onStart: () -> Unit) {
     ) {
         Text("👁️", fontSize = 80.sp)
         Spacer(Modifier.height(16.dp))
-        Text("Sight Word Ninja", fontWeight = FontWeight.Black, fontSize = 28.sp, color = DarkBlue)
-        Text("Tap the target word before time runs out!", color = Color.Gray, fontSize = 15.sp, textAlign = TextAlign.Center, modifier = Modifier.padding(vertical = 8.dp))
+        Text("Sight Word Ninja", fontWeight = FontWeight.Black, fontSize = 34.sp, color = DeepInk)
+        Text("Tap the target word before time runs out!", color = DeepInk.copy(alpha = 0.7f), fontSize = 18.sp, textAlign = TextAlign.Center, modifier = Modifier.padding(vertical = 12.dp))
         Spacer(Modifier.height(32.dp))
-        BouncyButton(onClick = onStart, color = Yellow80, modifier = Modifier.fillMaxWidth()) {
-            Text("Start Game! ⚡", color = DarkBlue, fontWeight = FontWeight.ExtraBold, fontSize = 18.sp)
+        BouncyButton(onClick = onStart, color = Teal, modifier = Modifier.fillMaxWidth()) {
+            Text("Start Game! ⚡", color = Color.White, fontWeight = FontWeight.ExtraBold, fontSize = 18.sp)
         }
     }
 }
 
 @Composable
-private fun GameOverView(score: Int, correctCount: Int, round: Int, onRestart: () -> Unit) {
+private fun CelebrationView(score: Int, correctCount: Int, round: Int, onRestart: () -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize().padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text("💀", fontSize = 72.sp)
+        Text("🎊", fontSize = 88.sp)   // Celebration — not skull/game over
         Spacer(Modifier.height(12.dp))
-        Text("Game Over!", fontWeight = FontWeight.Black, fontSize = 32.sp, color = DarkBlue)
-        Text("You reached round $round", color = Color.Gray, fontSize = 15.sp)
+        Text("Woohoo! Amazing!", fontWeight = FontWeight.Black, fontSize = 30.sp, color = Coral)
+        Text(
+            "You read $correctCount words in $round rounds!",
+            color = DeepInk.copy(alpha = 0.7f),
+            fontSize = 16.sp,
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Bold
+        )
         Spacer(Modifier.height(16.dp))
         Card(
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(containerColor = YellowLight)
+            shape = RoundedCornerShape(32.dp),
+            colors = CardDefaults.cardColors(containerColor = SunshineLight)
         ) {
-            Column(modifier = Modifier.fillMaxWidth().padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("Final Score: $score ⭐", fontWeight = FontWeight.ExtraBold, fontSize = 24.sp, color = Yellow80)
-                Text("Correct words: $correctCount", color = DarkBlue, fontWeight = FontWeight.Bold)
+            Column(modifier = Modifier.fillMaxWidth().padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                Text("Score: $score ⭐", fontWeight = FontWeight.Black, fontSize = 32.sp, color = Tangerine)
+                Text("Keep practising to get even better!", color = DeepInk, fontWeight = FontWeight.Black, fontSize = 16.sp)
             }
         }
         Spacer(Modifier.height(24.dp))
-        BouncyButton(onClick = onRestart, color = Yellow80, modifier = Modifier.fillMaxWidth()) {
-            Text("Play Again! 🔄", color = DarkBlue, fontWeight = FontWeight.ExtraBold, fontSize = 18.sp)
+        BouncyButton(onClick = onRestart, color = Teal, modifier = Modifier.fillMaxWidth()) {
+            Text("Play Again! 🔄", color = Color.White, fontWeight = FontWeight.ExtraBold, fontSize = 18.sp)
         }
     }
 }
@@ -195,7 +201,8 @@ private fun PlayingView(
                 repeat(3) { i -> Text(if (i < lives) "❤️" else "🖤", fontSize = 22.sp) }
             }
             // Timer circle
-            val timerColor = when (timeLeft) { 3 -> Green80; 2 -> Yellow80; else -> Red80 }
+            // Timer: green → sunshine → coral (avoid pure red — less anxiety-inducing)
+        val timerColor = when (timeLeft) { 3 -> Lime; 2 -> Sunshine; else -> Coral }
             Box(
                 modifier = Modifier
                     .size(48.dp)
@@ -203,7 +210,7 @@ private fun PlayingView(
                     .background(timerColor),
                 contentAlignment = Alignment.Center
             ) {
-                Text("$timeLeft", color = Color.White, fontWeight = FontWeight.Black, fontSize = 20.sp)
+                Text("$timeLeft", color = Color.White, fontWeight = FontWeight.Black, fontSize = 24.sp)
             }
         }
 
@@ -212,28 +219,28 @@ private fun PlayingView(
         // Target word card
         Card(
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(24.dp),
-            colors = CardDefaults.cardColors(containerColor = YellowLight),
-            elevation = CardDefaults.cardElevation(4.dp)
+            shape = RoundedCornerShape(32.dp),
+            colors = CardDefaults.cardColors(containerColor = TealLight),
+            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
             Column(
                 modifier = Modifier.fillMaxWidth().padding(20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("Find this word:", color = Color.Gray, fontSize = 13.sp)
-                Spacer(Modifier.height(8.dp))
+                Text("Find this word:", color = DeepInk.copy(alpha = 0.6f), fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Spacer(Modifier.height(12.dp))
                 Text(
                     targetWord,
                     fontWeight = FontWeight.Black,
-                    fontSize = 48.sp,
-                    color = DarkBlue
+                    fontSize = 56.sp,
+                    color = Teal
                 )
             }
         }
 
-        Spacer(Modifier.height(24.dp))
-        Text("Tap it below! 👇", color = Color.Gray, fontSize = 14.sp)
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(32.dp))
+        Text("Tap it below! 👇", color = DeepInk.copy(alpha = 0.8f), fontSize = 18.sp, fontWeight = FontWeight.Bold)
+        Spacer(Modifier.height(16.dp))
 
         // Word grid
         displayedWords.chunked(2).forEach { row ->
@@ -251,33 +258,33 @@ private fun PlayingView(
                         modifier = Modifier
                             .weight(1f)
                             .scale(scale)
-                            .clip(RoundedCornerShape(14.dp))
+                            .clip(RoundedCornerShape(24.dp))
                             .background(
                                 when {
-                                    isFlashed && flashCorrect -> GreenLight
-                                    isFlashed && !flashCorrect -> Color(0xFFFEE2E2)
+                                    isFlashed && flashCorrect -> LimeLight
+                                    isFlashed && !flashCorrect -> SunshineLight  // Warm yellow (not red!) for wrong
                                     else -> Color.White
                                 }
                             )
                             .border(
-                                3.dp,
+                                4.dp,
                                 when {
-                                    isFlashed && flashCorrect -> Green80
-                                    isFlashed && !flashCorrect -> Red80
+                                    isFlashed && flashCorrect -> Lime
+                                    isFlashed && !flashCorrect -> Sunshine  // Warm yellow, not red
                                     else -> Color(0xFFE5E7EB)
                                 },
-                                RoundedCornerShape(14.dp)
+                                RoundedCornerShape(24.dp)
                             )
                             .clickable { onWordTap(word) }
                             .padding(vertical = 16.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            word, fontWeight = FontWeight.ExtraBold, fontSize = 22.sp,
+                            word, fontWeight = FontWeight.Black, fontSize = 24.sp,
                             color = when {
-                                isFlashed && flashCorrect -> Green80
-                                isFlashed && !flashCorrect -> Red80
-                                else -> DarkBlue
+                                isFlashed && flashCorrect -> Lime
+                                isFlashed && !flashCorrect -> Tangerine  // Warm orange, not red
+                                else -> DeepInk
                             }
                         )
                     }

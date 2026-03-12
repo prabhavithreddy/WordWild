@@ -48,8 +48,8 @@ fun RhymeTimeScreen(
     val round = RHYME_ROUNDS[roundIndex % RHYME_ROUNDS.size]
     val isPerfect = chosen == round.correct
 
-    Column(modifier = Modifier.fillMaxSize().background(SkyBackground)) {
-        GameTopBar("Rhyme Time", "🎵", score, Green80, onBack)
+    Column(modifier = Modifier.fillMaxSize().background(WarmCream)) {
+        GameTopBar("Rhyme Time", "🎵", score, Lime, onBack)
 
         Column(
             modifier = Modifier.fillMaxSize().padding(16.dp),
@@ -58,29 +58,32 @@ fun RhymeTimeScreen(
             // Round indicator
             Text(
                 "Round ${(roundIndex % RHYME_ROUNDS.size) + 1} of ${RHYME_ROUNDS.size}",
-                color = Color.Gray, fontSize = 13.sp, modifier = Modifier.padding(bottom = 16.dp)
+                color = DeepInk.copy(alpha = 0.6f),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 16.dp)
             )
 
             // Target word
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(24.dp),
-                colors = CardDefaults.cardColors(containerColor = GreenLight),
-                elevation = CardDefaults.cardElevation(4.dp)
+                shape = RoundedCornerShape(32.dp),
+                colors = CardDefaults.cardColors(containerColor = LimeLight),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth().padding(28.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text("Find words that rhyme with:", color = Color.Gray, fontSize = 13.sp)
-                    Spacer(Modifier.height(8.dp))
-                    Text(round.target, fontWeight = FontWeight.Black, fontSize = 48.sp, color = Green80)
+                    Text("Find words that rhyme with:", color = DeepInk.copy(alpha = 0.6f), fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                    Spacer(Modifier.height(12.dp))
+                    Text(round.target, fontWeight = FontWeight.Black, fontSize = 56.sp, color = Lime)
                 }
             }
 
-            Spacer(Modifier.height(24.dp))
-            Text("Select all rhyming words:", color = DarkBlue, fontWeight = FontWeight.Bold, fontSize = 15.sp)
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(32.dp))
+            Text("Select all rhyming words:", color = DeepInk, fontWeight = FontWeight.Black, fontSize = 18.sp)
+            Spacer(Modifier.height(16.dp))
 
             // Options grid
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -93,30 +96,30 @@ fun RhymeTimeScreen(
                             val isSel = chosen.contains(opt)
                             val isCorrect = round.correct.contains(opt)
                             val bgColor = when {
-                                submitted && isCorrect -> GreenLight
-                                submitted && isSel && !isCorrect -> Color(0xFFFEE2E2)
-                                isSel -> Green80
+                                submitted && isCorrect -> LimeLight
+                                submitted && isSel && !isCorrect -> SunshineLight  // Warm, not red
+                                isSel -> Lime
                                 else -> Color.White
                             }
                             val borderColor = when {
-                                submitted && isCorrect -> Green80
-                                submitted && isSel && !isCorrect -> Red80
-                                isSel -> Green80
+                                submitted && isCorrect -> Lime
+                                submitted && isSel && !isCorrect -> Sunshine  // Warm orange, not red
+                                isSel -> Lime
                                 else -> Color(0xFFE5E7EB)
                             }
                             val textColor = when {
-                                submitted && isCorrect -> Green80
-                                submitted && isSel && !isCorrect -> Red80
+                                submitted && isCorrect -> Lime
+                                submitted && isSel && !isCorrect -> Tangerine  // Warm, not red
                                 isSel -> Color.White
-                                else -> DarkBlue
+                                else -> DeepInk
                             }
 
                             Box(
                                 modifier = Modifier
                                     .weight(1f)
-                                    .clip(RoundedCornerShape(14.dp))
+                                    .clip(RoundedCornerShape(24.dp))
                                     .background(bgColor)
-                                    .border(3.dp, borderColor, RoundedCornerShape(14.dp))
+                                    .border(4.dp, borderColor, RoundedCornerShape(24.dp))
                                     .clickable(enabled = !submitted) {
                                         chosen = if (isSel) chosen - opt else chosen + opt
                                     }
@@ -128,9 +131,9 @@ fun RhymeTimeScreen(
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     if (submitted) {
-                                        Text(if (isCorrect) "✅" else if (isSel) "❌" else "", fontSize = 14.sp)
+                                        Text(if (isCorrect) "✅" else if (isSel) "💡" else "", fontSize = 14.sp)  // 💡 hint, not ❌
                                     }
-                                    Text(opt, fontWeight = FontWeight.ExtraBold, fontSize = 22.sp, color = textColor)
+                                    Text(opt, fontWeight = FontWeight.Black, fontSize = 24.sp, color = textColor)
                                 }
                             }
                         }
@@ -152,10 +155,10 @@ fun RhymeTimeScreen(
                             score += chosen.count { it in round.correct } * 5
                         }
                     },
-                    color = Green80,
+                    color = Lime,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Check My Answer! 🎵", color = Color.White, fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
+                    Text("Check My Answer! 🎵", color = Color.White, fontWeight = FontWeight.Black, fontSize = 20.sp)
                 }
             } else {
                 AnimatedVisibility(visible = true, enter = slideInVertically() + fadeIn()) {
@@ -165,16 +168,16 @@ fun RhymeTimeScreen(
                     ) {
                         Card(
                             modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(20.dp),
-                            colors = CardDefaults.cardColors(containerColor = if (isPerfect) GreenLight else YellowLight)
+                            shape = RoundedCornerShape(32.dp),
+                            colors = CardDefaults.cardColors(containerColor = if (isPerfect) LimeLight else SunshineLight)
                         ) {
                             Column(
                                 modifier = Modifier.fillMaxWidth().padding(16.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Text(if (isPerfect) "🎉 Perfect Rhyme!" else "💡 Correct rhymes: ${round.correct.joinToString(", ")}",
-                                    color = if (isPerfect) Green80 else Orange80,
-                                    fontWeight = FontWeight.ExtraBold, fontSize = 17.sp, textAlign = TextAlign.Center)
+                                Text(if (isPerfect) "🎉 Perfect Rhyme!" else "💡 The rhymes were: ${round.correct.joinToString(", ")}",
+                                    color = if (isPerfect) Lime else Tangerine,
+                                    fontWeight = FontWeight.Black, fontSize = 18.sp, textAlign = TextAlign.Center)
                                 if (isPerfect) StarRating(stars = 3)
                             }
                         }
@@ -186,9 +189,9 @@ fun RhymeTimeScreen(
                                     chosen = emptySet()
                                     submitted = false
                                 },
-                                color = Green80, modifier = Modifier.fillMaxWidth()
+                                color = Lime, modifier = Modifier.fillMaxWidth()
                             ) {
-                                Text("Next Round →", color = Color.White, fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
+                                Text("Next Round →", color = Color.White, fontWeight = FontWeight.Black, fontSize = 20.sp)
                             }
                         } else {
                             // Game over
@@ -198,9 +201,9 @@ fun RhymeTimeScreen(
                                     roundIndex = 0; score = 0; correctRounds = 0; totalRounds = 0
                                     chosen = emptySet(); submitted = false
                                 },
-                                color = Green80, modifier = Modifier.fillMaxWidth()
+                                color = Lime, modifier = Modifier.fillMaxWidth()
                             ) {
-                                Text("🎊 Finished! Play Again", color = Color.White, fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
+                                Text("🎊 Finished! Play Again", color = Color.White, fontWeight = FontWeight.Black, fontSize = 20.sp)
                             }
                         }
                     }

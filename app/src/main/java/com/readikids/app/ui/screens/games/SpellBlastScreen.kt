@@ -75,36 +75,54 @@ fun SpellBlastContent(
         isCorrect = false
     }
 
-    Column(modifier = Modifier.fillMaxSize().background(SkyBackground)) {
-        GameTopBar("Spell Blast", "✏️", score, Orange80, onBack)
+    Column(modifier = Modifier.fillMaxSize().background(WarmCream)) {
+        GameTopBar("Spell Blast", "✏️", score, Tangerine, onBack)
 
         Column(
             modifier = Modifier.fillMaxSize().padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Word ${wordIndex + 1} of ${SPELL_WORDS.size}", color = Color.Gray, fontSize = 13.sp)
+            Text(
+                "Word ${wordIndex + 1} of ${SPELL_WORDS.size}",
+                color = DeepInk.copy(alpha = 0.8f),
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Black
+            )
             Spacer(Modifier.height(16.dp))
 
             // Word card with emoji and hint
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(24.dp),
-                colors = CardDefaults.cardColors(containerColor = OrangeLight),
-                elevation = CardDefaults.cardElevation(4.dp)
+                shape = RoundedCornerShape(32.dp),
+                colors = CardDefaults.cardColors(containerColor = TangerineLight),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth().padding(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(spellWord.emoji, fontSize = 64.sp)
-                    Spacer(Modifier.height(8.dp))
-                    Text(spellWord.hint, color = DarkBlue, fontWeight = FontWeight.Bold, fontSize = 15.sp, textAlign = TextAlign.Center)
+                    Text(spellWord.emoji, fontSize = 96.sp)
+                    Spacer(Modifier.height(16.dp))
+                    Text(
+                        spellWord.hint,
+                        color = DeepInk,
+                        fontWeight = FontWeight.Black,
+                        fontSize = 22.sp,
+                        lineHeight = 28.sp,
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
 
-            Spacer(Modifier.height(24.dp))
-            Text("Arrange the letters to spell the word!", color = Color.Gray, fontSize = 13.sp)
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(32.dp))
+            Text(
+                "Arrange the letters to spell the word!",
+                color = DeepInk.copy(alpha = 0.8f),
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Black,
+                textAlign = TextAlign.Center
+            )
+            Spacer(Modifier.height(20.dp))
 
             // Placed letters row (answer blanks)
             Row(
@@ -113,24 +131,24 @@ fun SpellBlastContent(
             ) {
                 placed.forEachIndexed { slotIdx, letter ->
                     val bgColor = when {
-                        showResult && isCorrect -> GreenLight
-                        showResult && !isCorrect -> Color(0xFFFEE2E2)
-                        letter != null -> OrangeLight
+                        showResult && isCorrect -> LimeLight
+                        showResult && !isCorrect -> SunshineLight   // Warm yellow, not red
+                        letter != null -> TangerineLight
                         else -> Color.White
                     }
                     val borderColor = when {
-                        showResult && isCorrect -> Green80
-                        showResult && !isCorrect -> Red80
-                        letter != null -> Orange80
+                        showResult && isCorrect -> Lime
+                        showResult && !isCorrect -> Sunshine          // Warm, not red
+                        letter != null -> Tangerine
                         else -> Color(0xFFE5E7EB)
                     }
 
                     Box(
                         modifier = Modifier
-                            .size(52.dp)
-                            .clip(RoundedCornerShape(12.dp))
+                            .size(60.dp)
+                            .clip(RoundedCornerShape(20.dp))
                             .background(bgColor)
-                            .border(3.dp, borderColor, RoundedCornerShape(12.dp))
+                            .border(4.dp, borderColor, RoundedCornerShape(20.dp))
                             .clickable(enabled = !showResult && letter != null) {
                                 // Remove from placed, return to available
                                 val removedLetter = placed[slotIdx]!!
@@ -144,11 +162,11 @@ fun SpellBlastContent(
                         Text(
                             letter?.toString() ?: "",
                             fontWeight = FontWeight.Black,
-                            fontSize = 24.sp,
+                            fontSize = 28.sp,
                             color = when {
-                                showResult && isCorrect -> Green80
-                                showResult && !isCorrect -> Red80
-                                else -> Orange80
+                                showResult && isCorrect -> Lime
+                                showResult && !isCorrect -> Tangerine  // Warm, not red
+                                else -> Tangerine
                             }
                         )
                     }
@@ -171,9 +189,9 @@ fun SpellBlastContent(
                     Box(
                         modifier = Modifier
                             .scale(scale)
-                            .size(52.dp)
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(Orange80)
+                            .size(60.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(Tangerine)
                             .clickable(enabled = !showResult) {
                                 val firstBlank = placed.indexOfFirst { it == null }
                                 if (firstBlank >= 0) {
@@ -195,7 +213,7 @@ fun SpellBlastContent(
                             },
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(letter.toString(), fontWeight = FontWeight.Black, fontSize = 24.sp, color = Color.White)
+                        Text(letter.toString(), fontWeight = FontWeight.Black, fontSize = 28.sp, color = Color.White)
                     }
                 }
             }
@@ -206,8 +224,8 @@ fun SpellBlastContent(
             if (showResult) {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(containerColor = if (isCorrect) GreenLight else YellowLight)
+                    shape = RoundedCornerShape(32.dp),
+                    colors = CardDefaults.cardColors(containerColor = if (isCorrect) LimeLight else SunshineLight)
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth().padding(16.dp),
@@ -215,9 +233,9 @@ fun SpellBlastContent(
                     ) {
                         Text(
                             if (isCorrect) "🎉 Correct! Well done!" else "💡 The word was: ${spellWord.word}",
-                            color = if (isCorrect) Green80 else Orange80,
-                            fontWeight = FontWeight.ExtraBold,
-                            fontSize = 17.sp
+                            color = if (isCorrect) Lime else Tangerine,
+                            fontWeight = FontWeight.Black,
+                            fontSize = 18.sp
                         )
                     }
                 }
@@ -227,9 +245,9 @@ fun SpellBlastContent(
                 if (wordIndex + 1 < SPELL_WORDS.size) {
                     BouncyButton(
                         onClick = { wordIndex++ },
-                        color = Orange80, modifier = Modifier.fillMaxWidth()
+                        color = Tangerine, modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Next Word →", color = Color.White, fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
+                        Text("Next Word →", color = Color.White, fontWeight = FontWeight.Black, fontSize = 20.sp)
                     }
                 } else {
                     BouncyButton(
@@ -237,14 +255,14 @@ fun SpellBlastContent(
                             onGameFinished(score, correctCount)
                             wordIndex = 0; score = 0; correctCount = 0
                         },
-                        color = Orange80, modifier = Modifier.fillMaxWidth()
+                        color = Tangerine, modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("🎊 Finished! Play Again", color = Color.White, fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
+                        Text("🎊 Finished! Play Again", color = Color.White, fontWeight = FontWeight.Black, fontSize = 20.sp)
                     }
                 }
             } else {
                 // Clear button
-                OutlinedButton(
+                BouncyButton(
                     onClick = {
                         val wordLetters = spellWord.word.toList()
                             .plus(('A'..'Z').filter { it !in spellWord.word }.shuffled().take(3))
@@ -253,10 +271,9 @@ fun SpellBlastContent(
                         placed = List(spellWord.word.length) { null }
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(50),
-                    border = BorderStroke(2.dp, Orange80)
+                    color = Tangerine.copy(alpha = 0.8f)
                 ) {
-                    Text("🔄 Reset Letters", color = Orange80, fontWeight = FontWeight.Bold)
+                    Text("🔄 Reset Letters", color = Color.White, fontWeight = FontWeight.Black, fontSize = 18.sp)
                 }
             }
         }

@@ -24,18 +24,22 @@ import androidx.compose.ui.unit.sp
 import com.readikids.app.ui.theme.*
 
 // ─── Bouncy Button ───────────────────────────────────────────────────
+// Stronger bounce effect — kids love satisfying tactile feedback
 @Composable
 fun BouncyButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    color: Color = Purple80,
-    contentPadding: PaddingValues = PaddingValues(horizontal = 28.dp, vertical = 14.dp),
+    color: Color = Coral,
+    contentPadding: PaddingValues = PaddingValues(horizontal = 32.dp, vertical = 18.dp),
     content: @Composable RowScope.() -> Unit
 ) {
     var isPressed by remember { mutableStateOf(false) }
     val scale by animateFloatAsState(
-        targetValue = if (isPressed) 0.93f else 1f,
-        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
+        targetValue = if (isPressed) 0.90f else 1f,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioLowBouncy,   // More bouncy than before
+            stiffness = Spring.StiffnessMedium
+        ),
         label = "scale"
     )
 
@@ -45,7 +49,7 @@ fun BouncyButton(
         colors = ButtonDefaults.buttonColors(containerColor = color),
         shape = RoundedCornerShape(50),
         contentPadding = contentPadding,
-        elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp, pressedElevation = 2.dp)
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 8.dp, pressedElevation = 2.dp)
     ) {
         content()
     }
@@ -67,28 +71,29 @@ fun GameTopBar(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
+        // Large back button — kids need big tap targets
         IconButton(
             onClick = onBack,
             modifier = Modifier
-                .clip(CircleShape)
+                .clip(RoundedCornerShape(16.dp))
                 .background(accentColor.copy(alpha = 0.15f))
-                .size(44.dp)
+                .size(52.dp)               // Increased from 44dp
         ) {
             Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = accentColor)
         }
 
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            Text(emoji, fontSize = 22.sp)
-            Text(title, style = MaterialTheme.typography.titleMedium, color = DarkBlue)
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(emoji, fontSize = 26.sp)  // Increased from 22sp
+            Text(title, style = MaterialTheme.typography.titleMedium, color = DeepInk)
         }
 
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(50))
                 .background(accentColor.copy(alpha = 0.15f))
-                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .padding(horizontal = 18.dp, vertical = 10.dp)  // More padding
         ) {
-            Text("⭐ $score", color = accentColor, fontWeight = FontWeight.ExtraBold)
+            Text("⭐ $score", color = accentColor, fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
         }
     }
 }
@@ -98,28 +103,29 @@ fun GameTopBar(
 fun StarRating(stars: Int, modifier: Modifier = Modifier) {
     Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
         repeat(3) { i ->
-            Text(if (i < stars) "⭐" else "☆", fontSize = 24.sp)
+            Text(if (i < stars) "⭐" else "☆", fontSize = 28.sp)  // Increased from 24sp
         }
     }
 }
 
 // ─── XP Progress Bar ─────────────────────────────────────────────────
+// Chunkier bar = more satisfying feedback for kids
 @Composable
 fun XpProgressBar(
     progress: Float,
-    color: Color = Yellow80,
+    color: Color = Sunshine,
     modifier: Modifier = Modifier,
-    height: Dp = 12.dp
+    height: Dp = 18.dp                 // Increased from 12dp
 ) {
     val animatedProgress by animateFloatAsState(
         targetValue = progress.coerceIn(0f, 1f),
-        animationSpec = tween(durationMillis = 800, easing = EaseOutCubic),
+        animationSpec = tween(durationMillis = 900, easing = EaseOutCubic),
         label = "xp_progress"
     )
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(50))
-            .background(Color.White.copy(alpha = 0.35f))
+            .background(Color.White.copy(alpha = 0.40f))
             .height(height)
     ) {
         Box(
@@ -127,7 +133,18 @@ fun XpProgressBar(
                 .fillMaxHeight()
                 .fillMaxWidth(animatedProgress)
                 .clip(RoundedCornerShape(50))
-                .background(color)
+                .background(
+                    Brush.horizontalGradient(listOf(color, color.copy(alpha = 0.8f)))
+                )
+        )
+        // Shimmer highlight on top for a candy-like look
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(animatedProgress)
+                .height(height / 2.5f)
+                .align(Alignment.TopStart)
+                .clip(RoundedCornerShape(topStart = 50.dp, topEnd = 50.dp))
+                .background(Color.White.copy(alpha = 0.30f))
         )
     }
 }
@@ -146,20 +163,30 @@ fun SkillProgressRow(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text("$icon $label", fontWeight = FontWeight.Bold, color = DarkBlue)
-            Text("$percent%", color = color, fontWeight = FontWeight.ExtraBold)
+            Text(
+                "$icon $label",
+                fontWeight = FontWeight.ExtraBold,
+                color = DeepInk,
+                fontSize = 15.sp        // Slightly larger
+            )
+            Text(
+                "$percent%",
+                color = color,
+                fontWeight = FontWeight.Black,
+                fontSize = 15.sp
+            )
         }
         Spacer(Modifier.height(6.dp))
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(10.dp)
+                .height(14.dp)          // Increased from 10dp
                 .clip(RoundedCornerShape(50))
-                .background(Color(0xFFE5E7EB))
+                .background(Color(0xFFEEEEEE))
         ) {
             val animPct by animateFloatAsState(
                 targetValue = percent / 100f,
-                animationSpec = tween(800, easing = EaseOutCubic),
+                animationSpec = tween(900, easing = EaseOutCubic),
                 label = "skill_bar"
             )
             Box(
@@ -167,7 +194,7 @@ fun SkillProgressRow(
                     .fillMaxWidth(animPct)
                     .fillMaxHeight()
                     .clip(RoundedCornerShape(50))
-                    .background(color)
+                    .background(Brush.horizontalGradient(listOf(color, color.copy(alpha = 0.7f))))
             )
         }
     }
@@ -182,8 +209,8 @@ fun AnimatedCard(
 ) {
     var pressed by remember { mutableStateOf(false) }
     val scale by animateFloatAsState(
-        targetValue = if (pressed) 0.96f else 1f,
-        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
+        targetValue = if (pressed) 0.94f else 1f,
+        animationSpec = spring(dampingRatio = Spring.DampingRatioLowBouncy),
         label = "card_scale"
     )
     Card(
@@ -193,15 +220,16 @@ fun AnimatedCard(
                 if (onClick != null) Modifier.clickable(onClick = onClick)
                 else Modifier
             ),
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(28.dp),   // More rounded — bubbly and kid-friendly
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
     ) {
-        Column(modifier = Modifier.padding(16.dp), content = content)
+        Column(modifier = Modifier.padding(18.dp), content = content)
     }
 }
 
 // ─── Result Overlay ───────────────────────────────────────────────────
+// Bigger, bolder, more celebratory for kids
 @Composable
 fun ResultOverlay(
     isCorrect: Boolean,
@@ -210,29 +238,35 @@ fun ResultOverlay(
 ) {
     AnimatedVisibility(
         visible = true,
-        enter = scaleIn(animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy)) + fadeIn()
+        enter = scaleIn(animationSpec = spring(dampingRatio = Spring.DampingRatioLowBouncy)) + fadeIn()
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(20.dp))
-                .background(if (isCorrect) GreenLight else Color(0xFFFEE2E2))
-                .border(3.dp, if (isCorrect) Green80 else Red80, RoundedCornerShape(20.dp))
-                .padding(20.dp)
+                .clip(RoundedCornerShape(28.dp))   // More rounded
+                .background(if (isCorrect) LimeLight else Color(0xFFFFECEC))
+                .border(4.dp, if (isCorrect) Lime else Strawberry, RoundedCornerShape(28.dp))
+                .padding(28.dp)                    // More padding
                 .clickable { onDismiss() },
             contentAlignment = Alignment.Center
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(if (isCorrect) "🎉" else "💡", fontSize = 48.sp)
+                Text(if (isCorrect) "🎉" else "💡", fontSize = 72.sp)   // Larger: 48→72sp
+                Spacer(Modifier.height(8.dp))
                 Text(
                     message,
-                    color = if (isCorrect) Green80 else Red80,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 20.sp,
+                    color = if (isCorrect) Lime else Strawberry,
+                    fontWeight = FontWeight.Black,
+                    fontSize = 24.sp,              // Increased from 20sp
                     textAlign = TextAlign.Center
                 )
-                Spacer(Modifier.height(8.dp))
-                Text("Tap to continue", color = Color.Gray, fontSize = 13.sp)
+                Spacer(Modifier.height(10.dp))
+                Text(
+                    "Tap to continue! 👇",
+                    color = DeepInk.copy(alpha = 0.6f),
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold
+                )
             }
         }
     }

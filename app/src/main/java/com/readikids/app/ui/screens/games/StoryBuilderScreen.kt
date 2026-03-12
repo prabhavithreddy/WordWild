@@ -58,8 +58,8 @@ fun StoryBuilderScreen(
     val q = STORY_QUESTIONS[questionIndex]
     val isCorrect = chosen == q.answer
 
-    Column(modifier = Modifier.fillMaxSize().background(SkyBackground)) {
-        GameTopBar("Story Builder", "📖", score, Blue80, onBack)
+    Column(modifier = Modifier.fillMaxSize().background(WarmCream)) {
+        GameTopBar("Story Builder", "📖", score, Sky, onBack)
 
         Column(
             modifier = Modifier
@@ -71,57 +71,62 @@ fun StoryBuilderScreen(
             // Question counter
             Text(
                 "Story ${questionIndex + 1} of ${STORY_QUESTIONS.size}",
-                color = Color.Gray, fontSize = 13.sp
+                color = DeepInk.copy(alpha = 0.6f),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
             )
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(16.dp))
 
             // Story card
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(24.dp),
-                colors = CardDefaults.cardColors(containerColor = BlueLight),
-                elevation = CardDefaults.cardElevation(4.dp)
+                shape = RoundedCornerShape(32.dp),
+                colors = CardDefaults.cardColors(containerColor = SkyLight),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth().padding(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(q.emoji, fontSize = 56.sp)
-                    Spacer(Modifier.height(12.dp))
+                    Text(q.emoji, fontSize = 72.sp)
+                    Spacer(Modifier.height(16.dp))
 
                     // Story text with blank
                     val blankText = chosen ?: "_____"
                     val blankColor = when {
-                        chosen == null -> Blue80
-                        isCorrect -> Green80
-                        else -> Red80
+                        chosen == null -> Sky
+                        isCorrect -> Lime
+                        else -> Sunshine   // Warm yellow, not red — encouraging not punishing
                     }
                     val storyText = buildAnnotatedString {
-                        withStyle(SpanStyle(color = DarkBlue, fontWeight = FontWeight.Bold, fontSize = 22.sp)) {
+                        withStyle(SpanStyle(color = DeepInk, fontWeight = FontWeight.ExtraBold, fontSize = 24.sp)) {
                             append("${q.before} ")
                         }
                         withStyle(SpanStyle(
                             color = blankColor,
-                            fontWeight = FontWeight.ExtraBold,
-                            fontSize = 22.sp,
-                            background = blankColor.copy(alpha = 0.12f)
+                            fontWeight = FontWeight.Black,
+                            fontSize = 24.sp,
+                            background = blankColor.copy(alpha = 0.15f)
                         )) {
                             append(blankText)
                         }
-                        withStyle(SpanStyle(color = DarkBlue, fontWeight = FontWeight.Bold, fontSize = 22.sp)) {
+                        withStyle(SpanStyle(color = DeepInk, fontWeight = FontWeight.ExtraBold, fontSize = 24.sp)) {
                             append(" ${q.after}")
                         }
                     }
-                    Text(storyText, textAlign = TextAlign.Center, lineHeight = 32.sp)
+                    Text(storyText, textAlign = TextAlign.Center, lineHeight = 36.sp)
                 }
             }
 
-            Spacer(Modifier.height(20.dp))
+            Spacer(Modifier.height(24.dp))
             Text(
                 "Choose the right word to complete the story!",
-                color = Color.Gray, fontSize = 13.sp, textAlign = TextAlign.Center
+                color = DeepInk.copy(alpha = 0.8f),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
             )
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(20.dp))
 
             // Options
             Row(
@@ -132,24 +137,24 @@ fun StoryBuilderScreen(
                     val isSel = chosen == opt
                     val isAns = opt == q.answer
                     val bgColor = when {
-                        showResult && isAns -> GreenLight
-                        showResult && isSel && !isAns -> Color(0xFFFEE2E2)
-                        isSel -> Blue80
+                        showResult && isAns -> LimeLight
+                        showResult && isSel && !isAns -> SunshineLight   // Warm, not red
+                        isSel -> Sky
                         else -> Color.White
                     }
                     val borderColor = when {
-                        showResult && isAns -> Green80
-                        showResult && isSel && !isAns -> Red80
-                        isSel -> Blue80
+                        showResult && isAns -> Lime
+                        showResult && isSel && !isAns -> Sunshine          // Warm, not red
+                        isSel -> Sky
                         else -> Color(0xFFE5E7EB)
                     }
 
                     Box(
                         modifier = Modifier
                             .weight(1f)
-                            .clip(RoundedCornerShape(14.dp))
+                            .clip(RoundedCornerShape(24.dp))
                             .background(bgColor)
-                            .border(3.dp, borderColor, RoundedCornerShape(14.dp))
+                            .border(4.dp, borderColor, RoundedCornerShape(24.dp))
                             .clickable(enabled = !showResult) {
                                 chosen = opt
                                 showResult = true
@@ -163,13 +168,13 @@ fun StoryBuilderScreen(
                     ) {
                         Text(
                             opt,
-                            fontWeight = FontWeight.ExtraBold,
-                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Black,
+                            fontSize = 20.sp,
                             color = when {
-                                showResult && isAns -> Green80
-                                showResult && isSel && !isAns -> Red80
+                                showResult && isAns -> Lime
+                                showResult && isSel && !isAns -> Tangerine  // Warm, not red
                                 isSel -> Color.White
-                                else -> DarkBlue
+                                else -> DeepInk
                             }
                         )
                     }
@@ -187,8 +192,8 @@ fun StoryBuilderScreen(
                 ) {
                     Card(
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(20.dp),
-                        colors = CardDefaults.cardColors(containerColor = if (isCorrect) GreenLight else YellowLight)
+                        shape = RoundedCornerShape(28.dp),
+                        colors = CardDefaults.cardColors(containerColor = if (isCorrect) LimeLight else SunshineLight)
                     ) {
                         Column(
                             modifier = Modifier.padding(16.dp).fillMaxWidth(),
@@ -196,9 +201,9 @@ fun StoryBuilderScreen(
                         ) {
                             Text(
                                 if (isCorrect) "🎉 Great choice!" else "💡 The answer was \"${q.answer}\"",
-                                color = if (isCorrect) Green80 else Orange80,
-                                fontWeight = FontWeight.ExtraBold,
-                                fontSize = 17.sp
+                                color = if (isCorrect) Lime else Tangerine,
+                                fontWeight = FontWeight.Black,
+                                fontSize = 18.sp
                             )
                             if (isCorrect) StarRating(stars = 3, modifier = Modifier.padding(top = 8.dp))
                         }
@@ -208,9 +213,9 @@ fun StoryBuilderScreen(
                     if (questionIndex + 1 < STORY_QUESTIONS.size) {
                         BouncyButton(
                             onClick = { questionIndex++; chosen = null; showResult = false },
-                            color = Blue80, modifier = Modifier.fillMaxWidth()
+                            color = Sky, modifier = Modifier.fillMaxWidth()
                         ) {
-                            Text("Next Story →", color = Color.White, fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
+                            Text("Next Story →", color = Color.White, fontWeight = FontWeight.Black, fontSize = 20.sp)
                         }
                     } else {
                         BouncyButton(
@@ -218,9 +223,9 @@ fun StoryBuilderScreen(
                                 viewModel.recordGameResult("story_builder", score, correctCount, STORY_QUESTIONS.size, "comprehension")
                                 questionIndex = 0; chosen = null; showResult = false; score = 0; correctCount = 0
                             },
-                            color = Blue80, modifier = Modifier.fillMaxWidth()
+                            color = Sky, modifier = Modifier.fillMaxWidth()
                         ) {
-                            Text("🎊 Finished! Play Again", color = Color.White, fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
+                            Text("🎊 Finished! Play Again", color = Color.White, fontWeight = FontWeight.Black, fontSize = 20.sp)
                         }
                     }
                 }

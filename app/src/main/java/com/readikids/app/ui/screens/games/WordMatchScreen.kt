@@ -73,8 +73,8 @@ fun WordMatchContent(
         else -> 1
     }
 
-    Column(modifier = Modifier.fillMaxSize().background(SkyBackground)) {
-        GameTopBar("Word Match", "🃏", score, Pink80, onBack)
+    Column(modifier = Modifier.fillMaxSize().background(WarmCream)) {
+        GameTopBar("Word Match", "🃏", score, Coral, onBack)
 
         if (gameComplete) {
             // Completion view
@@ -85,12 +85,12 @@ fun WordMatchContent(
             ) {
                 Text("🎊", fontSize = 80.sp)
                 Spacer(Modifier.height(12.dp))
-                Text("Amazing!", fontWeight = FontWeight.Black, color = DarkBlue, fontSize = 32.sp)
+                Text("Amazing!", fontWeight = FontWeight.Black, color = DeepInk, fontSize = 32.sp)
                 Text("You matched all words!", color = Color.Gray, fontSize = 16.sp)
                 Spacer(Modifier.height(16.dp))
                 StarRating(stars = stars)
-                Spacer(Modifier.height(8.dp))
-                Text("Score: $score ⭐", fontWeight = FontWeight.ExtraBold, color = Pink80, fontSize = 20.sp)
+                Spacer(Modifier.height(12.dp))
+                Text("Score: $score ⭐", fontWeight = FontWeight.Black, color = Coral, fontSize = 28.sp)
                 Spacer(Modifier.height(28.dp))
                 BouncyButton(
                     onClick = {
@@ -102,18 +102,19 @@ fun WordMatchContent(
                         wrongAttempts = 0
                         gameComplete = false
                     },
-                    color = Pink80
+                    color = Coral
                 ) {
-                    Text("Play Again! 🔄", color = Color.White, fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
+                    Text("Play Again! 🔄", color = Color.White, fontWeight = FontWeight.Black, fontSize = 18.sp)
                 }
             }
         } else {
             Text(
                 "Tap a word, then match it to the right picture!",
-                color = Color.Gray,
-                fontSize = 13.sp,
+                color = DeepInk.copy(alpha = 0.8f),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp)
             )
 
             Row(
@@ -140,22 +141,22 @@ fun WordMatchContent(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .offset(x = shakeAnim.dp)
-                                .clip(RoundedCornerShape(14.dp))
+                                .clip(RoundedCornerShape(24.dp))
                                 .background(
                                     when {
-                                        isMatched -> GreenLight
-                                        isSelected -> Pink80
+                                        isMatched -> LimeLight
+                                        isSelected -> Coral
                                         else -> Color.White
                                     }
                                 )
                                 .border(
-                                    3.dp,
+                                    4.dp,
                                     when {
-                                        isMatched -> Green80
-                                        isSelected -> Pink80
+                                        isMatched -> Lime
+                                        isSelected -> Coral
                                         else -> Color(0xFFE5E7EB)
                                     },
-                                    RoundedCornerShape(14.dp)
+                                    RoundedCornerShape(24.dp)
                                 )
                                 .clickable(enabled = !isMatched) {
                                     selectedWord = if (isSelected) null else pair.word
@@ -165,12 +166,12 @@ fun WordMatchContent(
                         ) {
                             Text(
                                 if (isMatched) "✅ ${pair.word}" else pair.word,
-                                fontWeight = FontWeight.ExtraBold,
-                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Black,
+                                fontSize = 18.sp,
                                 color = when {
-                                    isMatched -> Green80
+                                    isMatched -> Lime
                                     isSelected -> Color.White
-                                    else -> DarkBlue
+                                    else -> DeepInk
                                 }
                             )
                         }
@@ -188,9 +189,9 @@ fun WordMatchContent(
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clip(RoundedCornerShape(14.dp))
-                                .background(if (isMatched) GreenLight else Color.White)
-                                .border(3.dp, if (isMatched) Green80 else Color(0xFFE5E7EB), RoundedCornerShape(14.dp))
+                                .clip(RoundedCornerShape(24.dp))
+                                .background(if (isMatched) LimeLight else Color.White)
+                                .border(4.dp, if (isMatched) Lime else Color(0xFFE5E7EB), RoundedCornerShape(24.dp))
                                 .clickable(enabled = !isMatched && selectedWord != null) {
                                     val sel = selectedWord ?: return@clickable
                                     val target = pairs.find { it.word == sel } ?: return@clickable
@@ -206,7 +207,7 @@ fun WordMatchContent(
                                 .padding(10.dp),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(pair.emoji, fontSize = 36.sp)
+                            Text(pair.emoji, fontSize = 48.sp)
                         }
                     }
                 }

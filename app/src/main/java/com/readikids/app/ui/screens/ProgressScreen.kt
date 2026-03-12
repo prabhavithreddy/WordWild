@@ -1,5 +1,6 @@
 package com.readikids.app.ui.screens
 
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -61,95 +62,123 @@ fun ProgressScreenContent(
     onBack: () -> Unit
 ) {
     val skillDisplay = listOf(
-        Triple("phonics", "🔤 Phonics", Purple80),
-        Triple("vocabulary", "📝 Vocabulary", Pink80),
-        Triple("comprehension", "💡 Comprehension", Blue80),
-        Triple("spelling", "✏️ Spelling", Orange80),
-        Triple("rhyming", "🎵 Rhyming", Green80),
-        Triple("sight_words", "👁️ Sight Words", Yellow80),
+        Triple("phonics", "🔤 Phonics", Coral),
+        Triple("vocabulary", "📝 Vocabulary", Grape),
+        Triple("comprehension", "💡 Comprehension", Sky),
+        Triple("spelling", "✏️ Spelling", Tangerine),
+        Triple("rhyming", "🎵 Rhyming", Lime),
+        Triple("sight_words", "👁️ Sight Words", Teal),
     )
 
-    Column(modifier = Modifier.fillMaxSize().background(SkyBackground)) {
-        // Header
+    Column(modifier = Modifier.fillMaxSize().background(WarmCream)) {
+        // ── Header ─────────────────────────────────────────────────────
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(bottomStart = 28.dp, bottomEnd = 28.dp))
-                .background(Brush.linearGradient(listOf(Purple80, Blue80)))
-                .padding(20.dp)
+                .clip(RoundedCornerShape(bottomStart = 36.dp, bottomEnd = 36.dp))  // More rounded
+                .background(Brush.linearGradient(listOf(Coral, Tangerine)))         // Warm gradient
+                .padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 24.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(
                     onClick = onBack,
-                    modifier = Modifier.clip(CircleShape).background(Color.White.copy(alpha = 0.2f)).size(40.dp)
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Color.White.copy(alpha = 0.25f))
+                        .size(48.dp)         // Larger: 40→48dp
                 ) {
                     Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color.White)
                 }
-                Spacer(Modifier.width(12.dp))
-                Text("$childName's Progress 📊", color = Color.White, fontWeight = FontWeight.ExtraBold, fontSize = 20.sp)
+                Spacer(Modifier.width(14.dp))
+                Text(
+                    "$childName's Progress 📊",
+                    color = Color.White,
+                    fontWeight = FontWeight.Black,
+                    fontSize = 22.sp       // Larger: 20→22sp
+                )
             }
         }
 
         Column(
-            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Summary cards
+            // ── Summary Stats Cards ─────────────────────────────────────
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 listOf(
-                    Triple("⭐", "$totalXp XP", "Total Stars"),
+                    Triple("⭐", "$totalXp XP", "Stars Earned"),
                     Triple("🏆", "Level $currentLevel", "Reading Level"),
                     Triple("🔥", "$streakDays days", "Streak"),
-                ).forEach { (icon, value, label) ->
+                ).forEachIndexed { index, (icon, value, label) ->
+                    val cardColor = listOf(CoralLight, GrapeLight, TealLight)[index]
+                    val textColor = listOf(Coral, Grape, Teal)[index]
                     Card(
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(16.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        shape = RoundedCornerShape(22.dp),   // More rounded: 16→22dp
+                        colors = CardDefaults.cardColors(containerColor = cardColor),
                         elevation = CardDefaults.cardElevation(4.dp)
                     ) {
                         Column(
-                            modifier = Modifier.fillMaxWidth().padding(12.dp),
+                            modifier = Modifier.fillMaxWidth().padding(14.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text(icon, fontSize = 24.sp)
-                            Text(value, fontWeight = FontWeight.ExtraBold, fontSize = 15.sp, color = DarkBlue)
-                            Text(label, fontSize = 10.sp, color = Color.Gray)
+                            Text(icon, fontSize = 30.sp)      // Larger: 24→30sp
+                            Spacer(Modifier.height(4.dp))
+                            Text(value, fontWeight = FontWeight.Black, fontSize = 16.sp, color = textColor)
+                            Text(label, fontSize = 11.sp, color = textColor.copy(alpha = 0.7f), fontWeight = FontWeight.Bold)
                         }
                     }
                 }
             }
 
-            // XP Progress
+            // ── Level Progress Card ─────────────────────────────────────
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = PurpleLight),
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(containerColor = CoralLight),
                 elevation = CardDefaults.cardElevation(2.dp)
             ) {
-                Column(modifier = Modifier.padding(16.dp)) {
+                Column(modifier = Modifier.padding(18.dp)) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text("Level $currentLevel Progress", fontWeight = FontWeight.Bold, color = Purple80)
-                        Text("${(levelProgress * 100).toInt()}%", color = Purple80, fontWeight = FontWeight.ExtraBold)
+                        Text("Level $currentLevel Progress", fontWeight = FontWeight.ExtraBold, color = Coral, fontSize = 16.sp)
+                        Text("${(levelProgress * 100).toInt()}%", color = Coral, fontWeight = FontWeight.Black, fontSize = 16.sp)
                     }
-                    Spacer(Modifier.height(8.dp))
-                    XpProgressBar(progress = levelProgress, color = Purple80, modifier = Modifier.fillMaxWidth(), height = 14.dp)
-                    Spacer(Modifier.height(4.dp))
-                    Text("${(levelProgress * 200).toInt()} / 200 XP to Level ${currentLevel + 1}", fontSize = 12.sp, color = Purple80.copy(alpha = 0.7f))
+                    Spacer(Modifier.height(10.dp))
+                    XpProgressBar(progress = levelProgress, color = Coral, modifier = Modifier.fillMaxWidth(), height = 18.dp)
+                    Spacer(Modifier.height(6.dp))
+                    Text(
+                        "${(levelProgress * 200).toInt()} / 200 XP to Level ${currentLevel + 1}",
+                        fontSize = 13.sp,
+                        color = Coral.copy(alpha = 0.75f),
+                        fontWeight = FontWeight.Bold
+                    )
                 }
             }
 
-            // Skills
-            Text("📊 Reading Skills Breakdown", fontWeight = FontWeight.ExtraBold, fontSize = 18.sp, color = DarkBlue)
+            // ── Skills Breakdown ────────────────────────────────────────
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Box(
+                    modifier = Modifier.size(36.dp).clip(CircleShape).background(Teal.copy(alpha = 0.15f)),
+                    contentAlignment = Alignment.Center
+                ) { Text("📊", fontSize = 18.sp) }
+                Text("Reading Skills", fontWeight = FontWeight.Black, fontSize = 20.sp, color = DeepInk)
+            }
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(20.dp),
+                shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
-                elevation = CardDefaults.cardElevation(4.dp)
+                elevation = CardDefaults.cardElevation(5.dp)
             ) {
-                Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                Column(modifier = Modifier.padding(22.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
                     skillDisplay.forEach { (skillKey, label, color) ->
                         val stat = skillStats.find { it.skillName == skillKey }
                         SkillProgressRow(
@@ -162,77 +191,110 @@ fun ProgressScreenContent(
                 }
             }
 
-            // Games played
-            Text("🎮 Recent Games", fontWeight = FontWeight.ExtraBold, fontSize = 18.sp, color = DarkBlue)
+            // ── Recent Games ────────────────────────────────────────────
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Box(
+                    modifier = Modifier.size(36.dp).clip(CircleShape).background(Tangerine.copy(alpha = 0.15f)),
+                    contentAlignment = Alignment.Center
+                ) { Text("🎮", fontSize = 18.sp) }
+                Text("Recent Games", fontWeight = FontWeight.Black, fontSize = 20.sp, color = DeepInk)
+            }
             if (allProgress.isEmpty()) {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White)
+                    shape = RoundedCornerShape(22.dp),
+                    colors = CardDefaults.cardColors(containerColor = TangerineLight)
                 ) {
-                    Box(modifier = Modifier.fillMaxWidth().padding(24.dp), contentAlignment = Alignment.Center) {
-                        Text("No games played yet! Start a game to see your progress here.", color = Color.Gray, fontSize = 14.sp)
+                    Box(modifier = Modifier.fillMaxWidth().padding(28.dp), contentAlignment = Alignment.Center) {
+                        Text(
+                            "🎯 No games yet! Start a game to see your progress here.",
+                            color = Tangerine,
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.ExtraBold
+                        )
                     }
                 }
             } else {
                 allProgress.take(10).forEach { progress ->
                     Card(
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(14.dp),
+                        shape = RoundedCornerShape(18.dp),
                         colors = CardDefaults.cardColors(containerColor = Color.White),
-                        elevation = CardDefaults.cardElevation(2.dp)
+                        elevation = CardDefaults.cardElevation(3.dp)
                     ) {
                         Row(
-                            modifier = Modifier.fillMaxWidth().padding(14.dp),
+                            modifier = Modifier.fillMaxWidth().padding(16.dp),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Column {
-                                Text(progress.gameId.replace("_", " ").split(" ").joinToString(" ") { it.replaceFirstChar { c -> c.uppercase() } },
-                                    fontWeight = FontWeight.Bold, color = DarkBlue)
-                                Text("${progress.correctAnswers}/${progress.totalQuestions} correct", fontSize = 12.sp, color = Color.Gray)
+                                Text(
+                                    progress.gameId.replace("_", " ").split(" ").joinToString(" ") {
+                                        it.replaceFirstChar { c -> c.uppercase() }
+                                    },
+                                    fontWeight = FontWeight.ExtraBold, color = DeepInk, fontSize = 15.sp
+                                )
+                                Text(
+                                    "${progress.correctAnswers}/${progress.totalQuestions} correct",
+                                    fontSize = 13.sp, color = Color.Gray, fontWeight = FontWeight.Bold
+                                )
                             }
                             Column(horizontalAlignment = Alignment.End) {
                                 StarRating(stars = progress.starsEarned)
-                                Text("+${progress.xpEarned} XP", color = Yellow80, fontWeight = FontWeight.ExtraBold, fontSize = 12.sp)
+                                Text("+${progress.xpEarned} XP", color = Tangerine, fontWeight = FontWeight.Black, fontSize = 13.sp)
                             }
                         }
                     }
                 }
             }
 
-            // Achievements
-            Text("🏅 Achievements", fontWeight = FontWeight.ExtraBold, fontSize = 18.sp, color = DarkBlue)
+            // ── Achievements ────────────────────────────────────────────
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Box(
+                    modifier = Modifier.size(36.dp).clip(CircleShape).background(Sunshine.copy(alpha = 0.25f)),
+                    contentAlignment = Alignment.Center
+                ) { Text("🏅", fontSize = 18.sp) }
+                Text("Achievements", fontWeight = FontWeight.Black, fontSize = 20.sp, color = DeepInk)
+            }
             Achievements.all.chunked(3).forEach { row ->
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     row.forEach { achievement ->
                         val unlocked = badges.contains(achievement.id)
                         Card(
                             modifier = Modifier.weight(1f),
-                            shape = RoundedCornerShape(16.dp),
-                            colors = CardDefaults.cardColors(containerColor = if (unlocked) PurpleLight else Color(0xFFF9FAFB)),
-                            elevation = CardDefaults.cardElevation(if (unlocked) 3.dp else 0.dp)
+                            shape = RoundedCornerShape(22.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = if (unlocked) SunshineLight else Color(0xFFF5F5F5)
+                            ),
+                            elevation = CardDefaults.cardElevation(if (unlocked) 4.dp else 0.dp)
                         ) {
                             Column(
-                                modifier = Modifier.fillMaxWidth().padding(10.dp),
+                                modifier = Modifier.fillMaxWidth().padding(12.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Text(achievement.emoji, fontSize = 28.sp, modifier = Modifier.let { if (!unlocked) it else it })
+                                Text(achievement.emoji, fontSize = 34.sp)   // Larger: 28→34sp
+                                Spacer(Modifier.height(4.dp))
                                 Text(
                                     achievement.name,
-                                    fontSize = 9.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = if (unlocked) Purple80 else Color.Gray,
-                                    lineHeight = 12.sp
+                                    fontSize = 10.sp,
+                                    fontWeight = FontWeight.ExtraBold,
+                                    color = if (unlocked) Tangerine else Color.Gray,
+                                    lineHeight = 14.sp
                                 )
                             }
                         }
                     }
-                    // Fill empty if row < 3
+                    // Fill empty slots if row < 3
                     repeat(3 - row.size) { Spacer(modifier = Modifier.weight(1f)) }
                 }
             }
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(28.dp))
         }
     }
 }

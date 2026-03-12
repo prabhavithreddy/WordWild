@@ -78,13 +78,13 @@ fun AbcAdventureContent(
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().background(SkyBackground)
+        modifier = Modifier.fillMaxSize().background(WarmCream)
     ) {
         GameTopBar(
             title = "ABC Adventure",
             emoji = "🔤",
             score = score,
-            accentColor = Purple80,
+            accentColor = Coral,
             onBack = onBack
         )
 
@@ -92,25 +92,25 @@ fun AbcAdventureContent(
         selectedLetter?.let { letter ->
             Card(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
-                shape = RoundedCornerShape(24.dp),
-                colors = CardDefaults.cardColors(containerColor = PurpleLight),
-                elevation = CardDefaults.cardElevation(4.dp)
+                shape = RoundedCornerShape(32.dp),
+                colors = CardDefaults.cardColors(containerColor = CoralLight),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(20.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    Text(letter.letter.toString(), fontSize = 72.sp, fontWeight = FontWeight.Black, color = Purple80)
+                    Text(letter.letter.toString(), fontSize = 80.sp, fontWeight = FontWeight.Black, color = Coral)
                     Column {
-                        Text(letter.emoji, fontSize = 42.sp)
+                        Text(letter.emoji, fontSize = 48.sp)
                         Text(
                             "${letter.letter} is for ${letter.word}",
-                            fontWeight = FontWeight.ExtraBold,
-                            color = DarkBlue,
-                            fontSize = 18.sp
+                            fontWeight = FontWeight.Black,
+                            color = DeepInk,
+                            fontSize = 20.sp
                         )
-                        Text("Tap again to hear it!", color = Purple80, fontSize = 12.sp)
+                        Text("Tap again to hear it!", color = Coral, fontSize = 14.sp, fontWeight = FontWeight.Bold)
                     }
                 }
             }
@@ -118,16 +118,16 @@ fun AbcAdventureContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 8.dp)
-                .clip(RoundedCornerShape(20.dp))
-                .background(PurpleLight)
-                .padding(20.dp),
+                .clip(RoundedCornerShape(32.dp))
+                .background(CoralLight)
+                .padding(24.dp),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 "Tap any letter to learn it! 🎉\n${tappedLetters.size}/26 discovered",
-                color = Purple80,
-                fontWeight = FontWeight.Bold,
-                fontSize = 15.sp,
+                color = DeepInk,
+                fontWeight = FontWeight.Black,
+                fontSize = 18.sp,
                 textAlign = TextAlign.Center
             )
         }
@@ -154,18 +154,18 @@ fun AbcAdventureContent(
                     modifier = Modifier
                         .aspectRatio(1f)
                         .scale(scale)
-                        .clip(RoundedCornerShape(14.dp))
+                        .clip(RoundedCornerShape(24.dp))
                         .background(
                             when {
-                                isLearned -> Purple80
-                                selectedLetter?.letter == data.letter -> PurpleLight
+                                isLearned -> Coral
+                                selectedLetter?.letter == data.letter -> CoralLight
                                 else -> Color.White
                             }
                         )
                         .border(
-                            2.dp,
-                            if (selectedLetter?.letter == data.letter) Purple80 else Purple80.copy(alpha = 0.2f),
-                            RoundedCornerShape(14.dp)
+                            3.dp,
+                            if (selectedLetter?.letter == data.letter) Coral else Color(0xFFE5E7EB),
+                            RoundedCornerShape(24.dp)
                         )
                         .clickable {
                             selectedLetter = data
@@ -184,9 +184,9 @@ fun AbcAdventureContent(
                 ) {
                     Text(
                         data.letter.toString(),
-                        fontSize = 22.sp,
+                        fontSize = 24.sp,
                         fontWeight = FontWeight.Black,
-                        color = if (isLearned) Color.White else DarkBlue
+                        color = if (isLearned) Color.White else DeepInk
                     )
                 }
             }
@@ -198,16 +198,16 @@ fun AbcAdventureContent(
         if (tappedLetters.size == 26) {
             Card(
                 modifier = Modifier.fillMaxWidth().padding(16.dp),
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = GreenLight)
+                shape = RoundedCornerShape(32.dp),
+                colors = CardDefaults.cardColors(containerColor = LimeLight)
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth().padding(20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text("🎊", fontSize = 48.sp)
-                    Text("All Letters Learned!", fontWeight = FontWeight.Black, color = Green80, fontSize = 22.sp)
-                    Text("You earned $score stars!", color = DarkBlue, fontWeight = FontWeight.Bold)
+                    Text("🎊", fontSize = 64.sp)
+                    Text("All Letters Learned!", fontWeight = FontWeight.Black, color = Lime, fontSize = 24.sp)
+                    Text("You earned $score stars!", color = DeepInk, fontWeight = FontWeight.Black, fontSize = 18.sp)
                     Spacer(Modifier.height(16.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -220,20 +220,20 @@ fun AbcAdventureContent(
                                 selectedLetter = null
                                 score = 0
                             },
-                            color = Green80,
+                            color = Lime,
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text("Play Again 🔄", fontWeight = FontWeight.ExtraBold, color = Color.White)
+                            Text("Play Again 🔄", fontWeight = FontWeight.Black, color = Color.White, fontSize = 18.sp)
                         }
                         BouncyButton(
                             onClick = {
                                 onGameFinished(score)
                                 onBack()
                             },
-                            color = Purple80,
+                            color = Coral,
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text("Go Home 🏠", fontWeight = FontWeight.ExtraBold, color = Color.White)
+                            Text("Go Home 🏠", fontWeight = FontWeight.Black, color = Color.White, fontSize = 18.sp)
                         }
                     }
                 }
@@ -242,8 +242,8 @@ fun AbcAdventureContent(
             // Show progress bar
             LinearProgressIndicator(
                 progress = tappedLetters.size / 26f,
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 16.dp).height(12.dp).clip(RoundedCornerShape(50)),
-                color = Purple80,
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 24.dp).height(18.dp).clip(RoundedCornerShape(50)),
+                color = Coral,
                 trackColor = Color.White
             )
         }
