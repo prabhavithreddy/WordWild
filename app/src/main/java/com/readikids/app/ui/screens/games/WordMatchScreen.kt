@@ -58,6 +58,13 @@ fun WordMatchContent(
     var wrongAttempts by remember { mutableStateOf(0) }
     var gameComplete by remember { mutableStateOf(false) }
 
+    LaunchedEffect(shakingWord) {
+        if (shakingWord != null) {
+            kotlinx.coroutines.delay(400)
+            shakingWord = null
+        }
+    }
+
     LaunchedEffect(matchedPairs.size) {
         if (matchedPairs.size == pairs.size) {
             gameComplete = true

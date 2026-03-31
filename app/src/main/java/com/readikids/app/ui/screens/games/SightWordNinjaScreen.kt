@@ -67,7 +67,7 @@ fun SightWordNinjaContent(
         targetWord = target
         // Show 4-6 words, some are correct some are distractors
         val correctOnes = listOf(target, if (Math.random() > 0.5) target else wordSet.random())
-        val distractors = wordSet.filter { it != target }.shuffled().take(3)
+        val distractors = wordSet.filter { it != target }.shuffled().take(4)
         displayedWords = (correctOnes + distractors).shuffled().take(6)
         timeLeft = 3
         flashWord = null
@@ -192,7 +192,10 @@ private fun PlayingView(
     onWordTap: (String) -> Unit
 ) {
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Lives & timer

@@ -52,7 +52,10 @@ fun RhymeTimeScreen(
         GameTopBar("Rhyme Time", "🎵", score, Lime, onBack)
 
         Column(
-            modifier = Modifier.fillMaxSize().padding(16.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Round indicator

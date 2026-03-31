@@ -96,7 +96,7 @@ fun StoryBuilderScreen(
                     val blankColor = when {
                         chosen == null -> Sky
                         isCorrect -> Lime
-                        else -> Sunshine   // Warm yellow, not red — encouraging not punishing
+                        else -> Tangerine   // Tangerine provides much better text contrast than Sunshine
                     }
                     val storyText = buildAnnotatedString {
                         withStyle(SpanStyle(color = DeepInk, fontWeight = FontWeight.ExtraBold, fontSize = 24.sp)) {

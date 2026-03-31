@@ -79,7 +79,10 @@ fun SpellBlastContent(
         GameTopBar("Spell Blast", "✏️", score, Tangerine, onBack)
 
         Column(
-            modifier = Modifier.fillMaxSize().padding(16.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
